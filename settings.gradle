@@ -1,0 +1,5 @@
+include ':app-whiteboard',
+        ':lib-whiteboard-kit-domain',
+        ':lib-whiteboard-editor-domain',
+        ':lib-whiteboard-model',
+        ':lib-rx-delegate'

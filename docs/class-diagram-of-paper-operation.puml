@@ -1,0 +1,29 @@
+@startuml
+
+' Operation Producer ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+OperationProducerA *.. GestureDetectorA
+
+' Operation Consumer ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+package "Case: Use OperationProducerA" #DDDDDD {
+    interface PaperOperation
+
+    class PaperWidget
+    PaperWidget o.. OperationProducerA
+    PaperWidget *.. IPaper
+
+    note left of PaperWidget
+        Retain one Operation producer at a time, and consume the Operation.
+    end note
+
+    class PaperOperationFileRepository
+    PaperOperationFileRepository o..OperationProducerA
+
+    ' View ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+    class PaperView
+    PaperView *.. PaperWidget
+}
+
+@enduml

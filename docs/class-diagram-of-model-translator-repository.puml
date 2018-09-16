@@ -1,0 +1,53 @@
+@startuml
+
+' Translator ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+interface JsonSerializer {
+    + serialize
+}
+
+interface JsonDeserializer {
+    + deserialize
+}
+
+class PaperJSONTranslator
+PaperJSONTranslator <|-- JsonSerializer
+PaperJSONTranslator <|-- JsonDeserializer
+
+class ScrapJSONTranslator
+ScrapJSONTranslator <|-- JsonSerializer
+ScrapJSONTranslator <|-- JsonDeserializer
+
+class SketchStrokeJSONTranslator
+SketchStrokeJSONTranslator <|-- JsonSerializer
+SketchStrokeJSONTranslator <|-- JsonDeserializer
+
+' Repository ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+interface IPaperRepo
+interface IBitmapRepository
+interface IPaperTransformRepo
+
+class PaperRepoSqliteImpl
+PaperRepoSqliteImpl <|-- IPaperRepo
+PaperRepoSqliteImpl <|-- IBitmapRepository
+PaperRepoSqliteImpl *-- PaperJSONTranslator
+PaperRepoSqliteImpl *-- ScrapJSONTranslator
+PaperRepoSqliteImpl *-- SketchStrokeJSONTranslator
+
+class PaperTransformRepoFileImpl
+PaperTransformRepoFileImpl <|-- IPaperTransformRepo
+
+' Application (provider) ''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class PaperApplication
+PaperApplication *-- PaperRepoSqliteImpl
+PaperApplication *-- PaperTransformRepoFileImpl
+
+' SomeActivity (consumer) '''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class SomeActivity
+SomeActivity ..> PaperApplication : get repository instance(s)
+SomeActivity o.. IPaperRepo
+
+@enduml
