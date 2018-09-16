@@ -1,40 +1,56 @@
 Kotlin Delegate ReactiveX Properties
 ===
 
-A Kotlin delegate turning properties to ReactiveX observable
+A Kotlin delegate turning properties to ReactiveX observable easily.
 
 Usage
 ---
 
 ### RxValue
-```
-private var valueActual by RxValue(0)
 
-this::valueActual
+It works similarly as [Delegates.observable()](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-delegates/observable.html), moreover it's with ReactiveX power!
+
+```kotlin
+private var intValue by RxValue(0)
+
+// Use "::" to reflect the Delegate
+this::intValue
     .changed()
     .subscribe { newValue ->
         println(newValue)
     }
     .addTo(disposableBag)
+
+intValue = 1 // See assignment to 1
+intValue = 2 // See assignment to 2
+intValue = 3 // See assignment to 3
 ```
 
 ### RxMutableSet
-```
-private val mutableSetActual by RxMutableSet(mutableSetOf<Int>())
 
-this::valueActual
+It allows the observation of item addition and removal from a `MutableSet`.
+
+```kotlin
+private val mutableSet by RxMutableSet(mutableSetOf<Int>())
+
+// Use "::" to reflect the Delegate
+this::mutableSet
     .itemAdded()
     .subscribe { item ->
         println(item)
     }
     .addTo(disposableBag)
 
-this::valueActual
+this::mutableSet
     .itemRemoved()
     .subscribe { item ->
         println(item)
     }
     .addTo(disposableBag)
+
+mutableSetActual.add(0) // See 0 added
+mutableSetActual.add(1) // See 1 added
+mutableSetActual.add(2) // See 2 added
 ```
 
 How it works
