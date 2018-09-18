@@ -28,7 +28,7 @@ prop = 3 // See assignment to 3
 
 ### RxMutableSet
 
-It allows the observation of item addition and removal from a `MutableSet`.
+To observe the item addition and removal from a `MutableSet`, which are `itemAdded()` and `itemRemoved` accordingly.
 
 ```kotlin
 private val mutableSet by RxMutableSet(mutableSetOf<Int>())
@@ -37,14 +37,14 @@ private val mutableSet by RxMutableSet(mutableSetOf<Int>())
 this::mutableSet
     .itemAdded()
     .subscribe { item ->
-        println(item)
+        println("$item added")
     }
     .addTo(disposableBag)
 
 this::mutableSet
     .itemRemoved()
     .subscribe { item ->
-        println(item)
+        println("$item removed")
     }
     .addTo(disposableBag)
 
@@ -55,7 +55,7 @@ mutableSet.add(2) // See 2 added
 
 ### RxMutableMap
 
-It allows the observation of tuple addition and removal from a `MutableMap`.
+To observe the tuple addition and removal from a `MutableMap`, which are `tupleAdded` and `tupleRemoved` accordingly.
 
 ```kotlin
 private val mutableMap by RxMutableMap(mutableMapOf<Int, String>())
@@ -63,15 +63,15 @@ private val mutableMap by RxMutableMap(mutableMapOf<Int, String>())
 // Use "::" to reflect the Delegate
 this::mutableMap
     .tupleAdded()
-    .subscribe { item ->
-        println(item)
+    .subscribe { (k, v) ->
+        println("tuple=(key=$k, value=$v) just added")
     }
     .addTo(disposableBag)
 
 this::mutableMap
     .tupleRemoved()
-    .subscribe { item ->
-        println(item)
+    .subscribe { (k, v) ->
+        println("tuple=(key=$k, value=$v) just removed")
     }
     .addTo(disposableBag)
 
