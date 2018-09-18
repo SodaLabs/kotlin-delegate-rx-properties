@@ -55,3 +55,23 @@ fun <T : Any> KProperty0<MutableSet<T>>.itemRemoved(): Observable<T> {
 
     return delegate?.itemRemoved ?: Observable.empty()
 }
+
+@Suppress("UNCHECKED_CAST")
+fun <K : Any, V : Any> KProperty0<MutableMap<K, V>>.tupleAdded(): Observable<Pair<K, V>> {
+    // Use "isAccessible = true" to make the property accessible
+    isAccessible = true
+
+    val delegate = this.getDelegate() as? RxMutableMap<K, V>
+
+    return delegate?.itemAdded ?: Observable.empty()
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <K : Any, V : Any> KProperty0<MutableMap<K, V>>.tupleRemoved(): Observable<Pair<K, V>> {
+    // Use "isAccessible = true" to make the property accessible
+    isAccessible = true
+
+    val delegate = this.getDelegate() as? RxMutableMap<K, V>
+
+    return delegate?.itemRemoved ?: Observable.empty()
+}
