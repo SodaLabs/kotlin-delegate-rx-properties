@@ -22,19 +22,37 @@
 
 package co.sodalabs.delegate.rx
 
+import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
-import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class RxMutableSet<T : Any>(actual: MutableSet<T>) : ReadOnlyProperty<Any, MutableSet<T>>{
+class RxMutableSet<T : Any>(actual: MutableSet<T> = mutableSetOf())
+    : ReadWriteProperty<Any, MutableSet<T>> {
 
-    private val actualWrapper = RxMutableSetWrapper(actual = actual)
+    private val lock = Any()
+
+    @Volatile
+    private var actualWrapper = RxMutableSetWrapper(actual = actual)
 
     val itemAdded: Observable<T> get() = actualWrapper.itemAdded
     val itemRemoved: Observable<T> get() = actualWrapper.itemRemoved
 
+    private val changedSignal = BehaviorRelay.createDefault(actualWrapper as MutableSet<T>).toSerialized()
+    val changed: Observable<MutableSet<T>> get() = changedSignal.hide()
+
+    override fun setValue(thisRef: Any,
+                          property: KProperty<*>,
+                          value: MutableSet<T>) {
+        val newOne = synchronized(lock) {
+            actualWrapper = RxMutableSetWrapper(actual = value)
+            actualWrapper
+        }
+        changedSignal.accept(newOne)
+    }
+
     override fun getValue(thisRef: Any,
                           property: KProperty<*>): MutableSet<T> {
-        return actualWrapper
+        return synchronized(lock) { actualWrapper }
     }
 }

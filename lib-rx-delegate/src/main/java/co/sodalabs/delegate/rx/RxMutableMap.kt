@@ -38,7 +38,7 @@ class RxMutableMap<K : Any, V : Any>(actual: MutableMap<K, V> = mutableMapOf())
     val itemAdded: Observable<Pair<K, V>> get() = actualWrapper.itemAdded
     val itemRemoved: Observable<Pair<K, V>> get() = actualWrapper.itemRemoved
 
-    private val changedSignal = BehaviorRelay.createDefault(actualWrapper as MutableMap<K, V>)
+    private val changedSignal = BehaviorRelay.createDefault(actualWrapper as MutableMap<K, V>).toSerialized()
     val changed: Observable<MutableMap<K, V>> get() = changedSignal.hide()
 
     override fun setValue(thisRef: Any,

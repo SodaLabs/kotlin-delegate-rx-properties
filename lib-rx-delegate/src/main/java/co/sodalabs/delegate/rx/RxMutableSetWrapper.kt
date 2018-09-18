@@ -27,8 +27,6 @@ import io.reactivex.Observable
 
 class RxMutableSetWrapper<T>(private val actual: MutableSet<T>) : MutableSet<T> {
 
-    private val lock = Any()
-
     private val addedSignal = BehaviorRelay.create<T>()?.toSerialized()!!
     private val removedSignal = BehaviorRelay.create<T>()?.toSerialized()!!
 
@@ -36,24 +34,18 @@ class RxMutableSetWrapper<T>(private val actual: MutableSet<T>) : MutableSet<T> 
     val itemRemoved: Observable<T> get() = removedSignal.hide()
 
     override val size: Int
-        get() = synchronized(lock) { actual.size }
+        get() = actual.size
 
     override fun contains(element: T): Boolean {
-        return synchronized(lock) {
-            actual.contains(element)
-        }
+        return actual.contains(element)
     }
 
     override fun containsAll(elements: Collection<T>): Boolean {
-        return synchronized(lock) {
-            actual.containsAll(elements)
-        }
+        return actual.containsAll(elements)
     }
 
     override fun isEmpty(): Boolean {
-        return synchronized(lock) {
-            actual.isEmpty()
-        }
+        return actual.isEmpty()
     }
 
     override fun iterator(): MutableIterator<T> {
@@ -62,54 +54,44 @@ class RxMutableSetWrapper<T>(private val actual: MutableSet<T>) : MutableSet<T> 
     }
 
     override fun add(element: T): Boolean {
-        return synchronized(lock) {
-            if (actual.add(element)) {
-                addedSignal.accept(element)
-                true
-            } else {
-                false
-            }
+        return if (actual.add(element)) {
+            addedSignal.accept(element)
+            true
+        } else {
+            false
         }
     }
 
     override fun addAll(elements: Collection<T>): Boolean {
-        return synchronized(lock) {
-            if (actual.addAll(elements)) {
-                elements.forEach { addedSignal.accept(it) }
-                true
-            } else {
-                false
-            }
+        return if (actual.addAll(elements)) {
+            elements.forEach { addedSignal.accept(it) }
+            true
+        } else {
+            false
         }
     }
 
     override fun clear() {
-        synchronized(lock) {
-            val items = actual.toList()
-            actual.clear()
-            items.forEach { removedSignal.accept(it) }
-        }
+        val items = actual.toList()
+        actual.clear()
+        items.forEach { removedSignal.accept(it) }
     }
 
     override fun remove(element: T): Boolean {
-        return synchronized(lock) {
-            if (actual.remove(element)) {
-                removedSignal.accept(element)
-                true
-            } else {
-                false
-            }
+        return if (actual.remove(element)) {
+            removedSignal.accept(element)
+            true
+        } else {
+            false
         }
     }
 
     override fun removeAll(elements: Collection<T>): Boolean {
-        return synchronized(lock) {
-            if (actual.removeAll(elements)) {
-                elements.forEach { removedSignal.accept(it) }
-                true
-            } else {
-                false
-            }
+        return if (actual.removeAll(elements)) {
+            elements.forEach { removedSignal.accept(it) }
+            true
+        } else {
+            false
         }
     }
 

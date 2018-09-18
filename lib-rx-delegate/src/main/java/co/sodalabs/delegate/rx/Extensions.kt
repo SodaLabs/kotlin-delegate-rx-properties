@@ -31,9 +31,15 @@ fun <T : Any> KProperty0<T>.changed(): Observable<T> {
     // Use "isAccessible = true" to make the property accessible
     isAccessible = true
 
-    val delegate = this.getDelegate() as? RxValue<T>
-
-    return delegate?.changed ?: Observable.just(this as T)
+    val delegate = this.getDelegate()
+    return delegate?.let {
+        when (it) {
+            is RxValue<*> -> it.changed as Observable<T>
+            is RxMutableSet<*> -> it.changed as Observable<T>
+            is RxMutableMap<*, *> -> it.changed as Observable<T>
+            else -> throw IllegalAccessException()
+        }
+    } ?: Observable.just(this as T)
 }
 
 @Suppress("UNCHECKED_CAST")

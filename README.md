@@ -11,19 +11,19 @@ Usage
 It works similarly as [Delegates.observable()](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-delegates/observable.html), moreover it's with ReactiveX power!
 
 ```kotlin
-private var intValue by RxValue(0)
+private var prop by RxValue(0)
 
 // Use "::" to reflect the Delegate
-this::intValue
+this::prop
     .changed()
     .subscribe { newValue ->
         println(newValue)
     }
     .addTo(disposableBag)
 
-intValue = 1 // See assignment to 1
-intValue = 2 // See assignment to 2
-intValue = 3 // See assignment to 3
+prop = 1 // See assignment to 1
+prop = 2 // See assignment to 2
+prop = 3 // See assignment to 3
 ```
 
 ### RxMutableSet
@@ -48,10 +48,43 @@ this::mutableSet
     }
     .addTo(disposableBag)
 
-mutableSetActual.add(0) // See 0 added
-mutableSetActual.add(1) // See 1 added
-mutableSetActual.add(2) // See 2 added
+mutableSet.add(0) // See 0 added
+mutableSet.add(1) // See 1 added
+mutableSet.add(2) // See 2 added
 ```
+
+### RxMutableMap
+
+It allows the observation of tuple addition and removal from a `MutableMap`.
+
+```kotlin
+private val mutableMap by RxMutableMap(mutableMapOf<Int, String>())
+
+// Use "::" to reflect the Delegate
+this::mutableMap
+    .tupleAdded()
+    .subscribe { item ->
+        println(item)
+    }
+    .addTo(disposableBag)
+
+this::mutableMap
+    .tupleRemoved()
+    .subscribe { item ->
+        println(item)
+    }
+    .addTo(disposableBag)
+
+mutableMap[0] = "000" // See (0, "000") added
+mutableMap[1] = "111" // See (1, "111") added
+mutableMap[2] = "222" // See (2, "222") added
+```
+
+### Or checkout the unit test suit
+
+- [RxValue](lib-rx-delegate/src/test/java/co/sodalabs/delegate/rx/RxValueTest.kt) test
+- [RxMutableSet](lib-rx-delegate/src/test/java/co/sodalabs/delegate/rx/RxMutableSetTest.kt) test
+- [RxMutableMap](lib-rx-delegate/src/test/java/co/sodalabs/delegate/rx/RxMutableMapTest.kt) test
 
 How it works
 ---
@@ -75,3 +108,9 @@ class C {
 ```
 
 Therefore, we just create the magic Delegate with Observable capability. Yet, it's still the problem to get the real Delegate reference. One way to do get the Delegate is through [Reflection](https://kotlinlang.org/docs/reference/reflection.html). Hence, the library depends on Kotlin Reflection and you have to use `::` to reflect the Delegate to get the Observable functionality.
+
+Dependency
+---
+
+- Jake Wharton, [RxRelay](https://github.com/JakeWharton/RxRelay).
+- Kotlin [Reflection](https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect).

@@ -43,7 +43,7 @@ class RxMutableMapTest {
                                   Pair(1, "111"))
 
         Assert.assertEquals(2, mutableMap.size)
-        tester.assertValueCount(1)
+        tester.assertValueCount(2)
     }
 
     @Test
