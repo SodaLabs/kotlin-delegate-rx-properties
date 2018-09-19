@@ -1,6 +1,7 @@
-// Copyright Sep 2018-present SodaLabs
+// Copyright Sep 2018-present SodaLabs & CardinalBlue
 //
-// Author: tc@sodalabs.co
+// Author: jaime@cardinalblue.com
+//         tc@sodalabs.co
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the "Software"),
@@ -20,12 +21,18 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-package co.sodalabs.delegate.rx
+package co.sodalabs
 
+import co.sodalabs.delegate.rx.RxMutableMap
+import co.sodalabs.delegate.rx.RxMutableSet
+import co.sodalabs.delegate.rx.RxValue
 import io.reactivex.Observable
 import kotlin.reflect.KProperty0
 import kotlin.reflect.jvm.isAccessible
 
+/**
+ * Observe the property assignment.
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> KProperty0<T>.changed(): Observable<T> {
     // Use "isAccessible = true" to make the property accessible
@@ -42,6 +49,9 @@ fun <T : Any> KProperty0<T>.changed(): Observable<T> {
     } ?: Observable.just(this as T)
 }
 
+/**
+ * Observe the item added from a [MutableSet].
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> KProperty0<MutableSet<T>>.itemAdded(): Observable<T> {
     // Use "isAccessible = true" to make the property accessible
@@ -52,6 +62,9 @@ fun <T : Any> KProperty0<MutableSet<T>>.itemAdded(): Observable<T> {
     return delegate?.itemAdded ?: Observable.empty()
 }
 
+/**
+ * Observe the item removed from a [MutableSet].
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T : Any> KProperty0<MutableSet<T>>.itemRemoved(): Observable<T> {
     // Use "isAccessible = true" to make the property accessible
@@ -62,6 +75,9 @@ fun <T : Any> KProperty0<MutableSet<T>>.itemRemoved(): Observable<T> {
     return delegate?.itemRemoved ?: Observable.empty()
 }
 
+/**
+ * Observe the tuple added from a [MutableMap].
+ */
 @Suppress("UNCHECKED_CAST")
 fun <K : Any, V : Any> KProperty0<MutableMap<K, V>>.tupleAdded(): Observable<Pair<K, V>> {
     // Use "isAccessible = true" to make the property accessible
@@ -72,6 +88,9 @@ fun <K : Any, V : Any> KProperty0<MutableMap<K, V>>.tupleAdded(): Observable<Pai
     return delegate?.itemAdded ?: Observable.empty()
 }
 
+/**
+ * Observe the tuple removed from a [MutableMap].
+ */
 @Suppress("UNCHECKED_CAST")
 fun <K : Any, V : Any> KProperty0<MutableMap<K, V>>.tupleRemoved(): Observable<Pair<K, V>> {
     // Use "isAccessible = true" to make the property accessible

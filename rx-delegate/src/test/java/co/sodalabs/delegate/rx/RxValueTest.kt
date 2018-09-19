@@ -22,6 +22,7 @@
 
 package co.sodalabs.delegate.rx
 
+import co.sodalabs.changed
 import io.reactivex.Observable
 import org.junit.Test
 import org.junit.runner.RunWith

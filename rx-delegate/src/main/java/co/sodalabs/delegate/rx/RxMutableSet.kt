@@ -22,6 +22,7 @@
 
 package co.sodalabs.delegate.rx
 
+import co.sodalabs.RxMutableSetWrapper
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import kotlin.properties.ReadWriteProperty

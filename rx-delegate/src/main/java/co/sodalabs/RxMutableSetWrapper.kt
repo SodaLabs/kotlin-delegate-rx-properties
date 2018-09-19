@@ -20,11 +20,15 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-package co.sodalabs.delegate.rx
+package co.sodalabs
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 
+/**
+ * Encapsulate [MutableSet] and add ReactiveX observable functionality in the
+ * wrapper class.
+ */
 class RxMutableSetWrapper<T>(private val actual: MutableSet<T>) : MutableSet<T> {
 
     private val addedSignal = BehaviorRelay.create<T>()?.toSerialized()!!

@@ -22,6 +22,9 @@
 
 package co.sodalabs.delegate.rx
 
+import co.sodalabs.changed
+import co.sodalabs.tupleAdded
+import co.sodalabs.tupleRemoved
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

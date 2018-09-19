@@ -1,6 +1,7 @@
-// Copyright Sep 2018-present SodaLabs
+// Copyright Sep 2018-present SodaLabs & CardinalBlue
 //
-// Author: tc@sodalabs.co
+// Author: jaime@cardinalblue.com
+//         tc@sodalabs.co
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the "Software"),

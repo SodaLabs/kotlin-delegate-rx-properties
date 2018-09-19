@@ -22,6 +22,7 @@
 
 package co.sodalabs.delegate.rx
 
+import co.sodalabs.RxMutableMapWrapper
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import kotlin.properties.ReadWriteProperty
@@ -55,5 +56,4 @@ class RxMutableMap<K : Any, V : Any>(actual: MutableMap<K, V> = mutableMapOf())
                           property: KProperty<*>): MutableMap<K, V> {
         return synchronized(lock) { actualWrapper }
     }
-
 }
