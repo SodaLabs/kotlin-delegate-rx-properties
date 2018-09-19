@@ -1,7 +1,26 @@
+[ ![Download](https://api.bintray.com/packages/boyw165/android/kotlin-delegate-rx-properties/images/download.svg) ](https://bintray.com/boyw165/android/kotlin-delegate-rx-properties/_latestVersion)
+
 Kotlin Delegate ReactiveX Properties
 ===
 
 A Kotlin delegate turning properties to ReactiveX observable easily.
+
+Setup
+---
+
+Add this into your dependencies block.
+
+```
+implementation 'co.sodalabs:kotlin-delegate-rx-properties:1.0.0'
+```
+
+If you cannot find the package, add this to your gradle repository
+
+```
+maven {
+    url 'https://dl.bintray.com/boyw165/android'
+}
+```
 
 Usage
 ---
@@ -107,7 +126,7 @@ class C {
 }
 ```
 
-Therefore, we just create the magic Delegate with Observable capability. Yet, it's still the problem to get the real Delegate reference. One way to do get the Delegate is through [Reflection](https://kotlinlang.org/docs/reference/reflection.html). Hence, the library depends on Kotlin Reflection and you have to use `::` to reflect the Delegate to get the Observable functionality.
+We create the magic Delegate with Observable capability and yet, it's still the problem to get the real Delegate reference. One way to do get the Delegate is through [Reflection](https://kotlinlang.org/docs/reference/reflection.html). Hence, the library depends on Kotlin Reflection and you have to use `::` to reflect the Delegate to get the Observable functionality.
 
 Dependency
 ---
