@@ -1,0 +1,99 @@
+version: 2
+
+jobs:
+  build-job:
+    working_directory: ~/kotlin-delegate-rx-properties
+
+    docker:
+      - image: circleci/android:api-27-alpha
+
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms256m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: project-{{ checksum "build.gradle" }}-{{ checksum "dependencies.gradle" }}-{{ checksum  "rx-delegate/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "dependencies.gradle" }}-{{ checksum  "rx-delegate/build.gradle" }}
+
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+
+      - save_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          paths:
+            - ~/android
+
+      - store_artifacts:
+          path: rx-delegate/build/reports/
+          destination: reports/
+
+      - run:
+          name: Run unit test
+          command: ./gradlew testDebugUnitTest
+
+      - store_artifacts:
+          path: rx-delegate/build/outputs/
+          destination: outputs/
+
+      - save_cache:
+          key: project-{{ checksum "build.gradle" }}-{{ checksum "dependencies.gradle" }}-{{ checksum  "rx-delegate/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          paths:
+            - "~/.gradle/4.6"
+            - "~/.gradle/wrapper/dists/gradle-4.6-all"
+            - "~/.gradle/caches/modules-2"
+            - "~/.gradle/buildOutputCleanup"
+            - "~/.m2"
+
+  deploy-job:
+    working_directory: ~/kotlin-delegate-rx-properties
+
+    docker:
+      - image: circleci/android:api-27-alpha
+
+    environment:
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms256m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+
+    steps:
+      - checkout
+
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+
+      - run:
+          name: Run unit test
+          command: ./gradlew testDebugUnitTest
+
+      - run:
+          name: Build artifact
+          command: ./gradlew assembleRelease
+
+      - run:
+          name: Publish to Github
+          command: ./gradlew githubRelease
+
+      - run:
+          name: Publish to JCenter
+          command: ./gradlew rx-delegate::bintrayUpload
+
+      - store_artifacts:
+          path: rx-delegate/build/outputs/
+          destination: outputs/
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-job:
+          filters:
+            branches:
+              ignore: master
+      - deploy-job:
+          filters:
+            branches:
+              only: master
