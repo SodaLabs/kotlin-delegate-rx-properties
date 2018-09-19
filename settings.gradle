@@ -1,1 +1,1 @@
-include ':lib-rx-delegate'
+include ':rx-delegate'

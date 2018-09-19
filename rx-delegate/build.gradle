@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+// Factory DSL
+apply from: rootProject.file('gradle_scripts/factory.gradle')
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -9,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode buildVersionCode(project.artifact_version)
+        versionName project.artifact_version
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -46,3 +49,6 @@ dependencies {
     // Instrumentation tests.
     androidTestImplementation rootProject.ext.dep.testEspressoCore
 }
+
+// Deployment script.
+apply from: rootProject.file('gradle_scripts/deploy.gradle')

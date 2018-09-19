@@ -1,0 +1,33 @@
+//android.applicationVariants.all { variant ->
+//    def appName
+//
+//    if (project.hasProperty("applicationName")) {
+//        appName = applicationName
+//    } else {
+//        appName = project.name
+//    }
+//
+//    variant.outputs.all { output ->
+//        outputFileName = "${appName}-${output.baseName}-${variant.versionName}.apk"
+//    }
+//}
+//
+//
+//android.applicationVariants.all { variant ->
+//    variant.assemble.doLast {
+//        if (variant.mappingFile != null && variant.mappingFile.exists()) {
+//            def mappingFileName = "$archivesBaseName-$variant.baseName-mapping.txt"
+//            (new File(variant.mappingFile.parent, mappingFileName)).delete()
+//
+//            def appName
+//            if (project.hasProperty("applicationName")) {
+//                appName = applicationName
+//            } else {
+//                appName = project.name
+//            }
+//
+//            variant.mappingFile.renameTo(variant.mappingFile.parent +
+//                    "/$appName-$variant.baseName-${variant.versionName}-mapping.txt")
+//        }
+//    }
+//}

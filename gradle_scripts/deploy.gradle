@@ -1,0 +1,23 @@
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    bintrayUser = System.getenv('BINTRAY_USER')
+    bintrayKey = System.getenv('BINTRAY_API_KEY')
+
+    repoName = 'android'
+    uploadName = 'kotlin-delegate-rx-properties'
+
+    groupId = 'co.sodalabs'
+    artifactId = 'kotlin-delegate-rx-properties'
+    publishVersion = project.artifact_version
+
+    userOrg = System.getenv('BINTRAY_USER')
+    desc = 'A Kotlin delegate turning properties to ReactiveX observable easily.'
+    website = 'https://github.com/SodaLabs/kotlin-delegate-rx-properties'
+    dryRun = false
+}
+
+// Avoid Kotlin docs error
+tasks.withType(Javadoc) {
+    enabled = false
+}
